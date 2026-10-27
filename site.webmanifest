@@ -1,0 +1,24 @@
+{
+  "name": "EA SPORTS FC™ Squad Updater",
+  "short_name": "FC Squads",
+  "description": "Download official EA SPORTS FC squad updates from FC 27 down to FC 24 with tailored console import instructions.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#153355",
+  "theme_color": "#153355",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "assets/favicon.ico",
+      "sizes": "48x48 32x32 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "assets/logo.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["games", "utilities", "entertainment"]
+}

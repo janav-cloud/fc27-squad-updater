@@ -1,0 +1,6 @@
+# Robots.txt for EA SPORTS FC Squad Updater
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: sitemap.xml
