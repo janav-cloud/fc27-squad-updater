@@ -1,0 +1,831 @@
+/* ==========================================================================
+   EA SPORTS FC SQUAD UPDATER - FLUID RESPONSIVE DESIGN SYSTEM
+   Palette:
+   Primary:   #153355, #203E6F
+   Secondary: #0A4B52, #107B80, #14948E
+   Tertiary:  #1EBB88, #50D9A4, #98FACE
+   Font: DM Sans
+   ========================================================================== */
+
+:root {
+    /* Primary Colors */
+    --pri-dark: #153355;
+    --pri-mid: #203E6F;
+    --pri-deepest: #0c1a2d;
+
+    /* Secondary Colors */
+    --sec-deep: #0A4B52;
+    --sec-mid: #107B80;
+    --sec-vibrant: #14948E;
+
+    /* Tertiary Colors */
+    --ter-jade: #1EBB88;
+    --ter-mint: #50D9A4;
+    --ter-ice: #98FACE;
+
+    /* Signature 120deg Gradient System */
+    --user-gradient: linear-gradient(
+        120deg,
+        #153355 0%,
+        #203E6F 30%,
+        #107B80 65%,
+        #14948E 82%,
+        #1EBB88 100%
+    );
+
+    --user-gradient-hover: linear-gradient(
+        120deg,
+        #203E6F 0%,
+        #107B80 30%,
+        #14948E 65%,
+        #1EBB88 85%,
+        #50D9A4 100%
+    );
+
+    --user-gradient-subtle: linear-gradient(
+        120deg,
+        rgba(21, 51, 85, 0.9) 0%,
+        rgba(32, 62, 111, 0.8) 30%,
+        rgba(16, 123, 128, 0.65) 65%,
+        rgba(20, 148, 142, 0.5) 82%,
+        rgba(30, 187, 136, 0.4) 100%
+    );
+
+    /* Semantic Mappings */
+    --bg-panel: rgba(14, 30, 52, 0.94);
+    --bg-inner: rgba(10, 22, 38, 0.9);
+    --bg-card: rgba(16, 34, 60, 0.85);
+    --bg-input: #091726;
+
+    --border-subtle: rgba(152, 250, 206, 0.22);
+    --border-hover: #14948E;
+    --border-active: #50D9A4;
+
+    --glow-mint: rgba(80, 217, 164, 0.35);
+    --glow-ice: rgba(152, 250, 206, 0.4);
+
+    --text-primary: #F8FDFA;
+    --text-secondary: #a3c5d6;
+    --text-muted: #6f92a4;
+    --text-accent: #98FACE;
+
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-pill: 9999px;
+
+    --font-main: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'Space Mono', Consolas, monospace;
+    --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ==========================================================================
+   Base Layout & Viewport Sizing
+   ========================================================================== */
+
+html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    /* Exact 120deg Gradient, darkened for high-contrast foreground elevation */
+    background: 
+        linear-gradient(180deg, rgba(8, 16, 28, 0.55) 0%, rgba(8, 16, 28, 0.75) 100%),
+        linear-gradient(
+            120deg,
+            #153355 0%,
+            #203E6F 30%,
+            #107B80 65%,
+            #14948E 82%,
+            #1EBB88 100%
+        );
+    background-attachment: fixed;
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    line-height: 1.5;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(0.75rem, 2vw, 1.25rem);
+}
+
+.app-viewport {
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: clamp(0.65rem, 1.5vh, 1rem);
+}
+
+/* Desktop Non-Scrolling Mode when screen height >= 740px */
+@media (min-width: 901px) and (min-height: 740px) {
+    body {
+        height: 100vh;
+        max-height: 100vh;
+        overflow: hidden;
+    }
+    .app-viewport {
+        height: 100%;
+        max-height: 94vh;
+    }
+}
+
+/* Mobile & Small Screens Scrolling Fallback */
+@media (max-width: 900px), (max-height: 739px) {
+    body {
+        height: auto;
+        min-height: 100vh;
+        max-height: none;
+        overflow-y: auto;
+        align-items: flex-start;
+    }
+    .app-viewport {
+        height: auto;
+        max-height: none;
+        min-height: 100%;
+        padding: 0.5rem 0;
+    }
+}
+
+/* ==========================================================================
+   Header Navigation Bar
+   ========================================================================== */
+
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: clamp(0.5rem, 1.2vh, 0.85rem);
+    border-bottom: 1px solid var(--border-subtle);
+    flex-shrink: 0;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.65rem, 1.5vw, 0.95rem);
+}
+
+/* Brand Logo from assets/logo.webp */
+.brand-logo-img {
+    height: clamp(30px, 4vw, 38px);
+    width: auto;
+    object-fit: contain;
+    transition: var(--transition);
+}
+
+.brand-titles h1 {
+    font-family: var(--font-main);
+    font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: var(--text-primary);
+}
+
+.accent-title {
+    color: var(--ter-mint);
+    font-weight: 900;
+}
+
+.tag-updater {
+    color: var(--ter-ice);
+    font-weight: 700;
+}
+
+.brand-sub {
+    font-size: clamp(0.7rem, 1.4vw, 0.8rem);
+    color: var(--text-secondary);
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.5rem, 1.5vw, 0.85rem);
+    flex-wrap: wrap;
+}
+
+/* Title Selector Dropdown with Subtle Gradient */
+.title-select-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: linear-gradient(
+        120deg,
+        rgba(21, 51, 85, 0.92) 0%,
+        rgba(32, 62, 111, 0.85) 45%,
+        rgba(16, 123, 128, 0.6) 100%
+    );
+    border: 1px solid var(--sec-vibrant);
+    border-radius: var(--radius-md);
+    padding: clamp(0.25rem, 0.8vh, 0.35rem) clamp(0.55rem, 1.2vw, 0.75rem);
+    box-shadow: 0 4px 14px rgba(10, 25, 42, 0.35);
+    transition: var(--transition);
+}
+
+.title-select-wrapper:hover {
+    border-color: var(--ter-mint);
+    box-shadow: 0 0 14px var(--glow-mint);
+}
+
+.select-label {
+    font-size: clamp(0.68rem, 1.3vw, 0.75rem);
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--ter-mint);
+    letter-spacing: 0.05em;
+}
+
+.select-box {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.title-dropdown {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    font-size: clamp(0.8rem, 1.6vw, 0.88rem);
+    font-weight: 700;
+    padding-right: 1.2rem;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+}
+
+.title-dropdown option {
+    background-color: var(--pri-dark);
+    color: var(--text-primary);
+}
+
+.select-arrow {
+    position: absolute;
+    right: 0;
+    font-size: 0.6rem;
+    color: var(--ter-mint);
+    pointer-events: none;
+}
+
+/* Status Pill with Dynamic Roster Date */
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: linear-gradient(
+        120deg,
+        rgba(21, 51, 85, 0.88) 0%,
+        rgba(32, 62, 111, 0.8) 40%,
+        rgba(16, 123, 128, 0.65) 100%
+    );
+    border: 1px solid var(--sec-vibrant);
+    padding: clamp(0.25rem, 0.8vh, 0.4rem) clamp(0.55rem, 1.2vw, 0.85rem);
+    border-radius: var(--radius-pill);
+    font-size: clamp(0.72rem, 1.4vw, 0.8rem);
+    color: var(--ter-ice);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.pulse-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--ter-mint);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--ter-mint);
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   2-Column Dashboard Grid
+   ========================================================================== */
+
+.dashboard-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(0.85rem, 1.8vw, 1.25rem);
+    min-height: 0;
+}
+
+.panel {
+    background: rgba(14, 30, 52, 0.94);
+    border: 1px solid rgba(80, 217, 164, 0.28);
+    border-radius: var(--radius-lg);
+    padding: clamp(1rem, 2.2vw, 1.5rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), 0 0 1px rgba(152, 250, 206, 0.3);
+    min-height: 0;
+    backdrop-filter: blur(20px);
+    position: relative;
+    gap: clamp(0.6rem, 1.5vh, 0.9rem);
+}
+
+.panel-header {
+    flex-shrink: 0;
+}
+
+.panel-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 0.2rem;
+}
+
+.gold-badge {
+    background: rgba(30, 187, 136, 0.18);
+    color: var(--ter-mint);
+    border: 1px solid rgba(80, 217, 164, 0.45);
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: clamp(0.65rem, 1.2vw, 0.7rem);
+    font-weight: 800;
+    letter-spacing: 0.05em;
+}
+
+.panel-header h2 {
+    font-family: var(--font-main);
+    font-size: clamp(1rem, 1.8vw, 1.15rem);
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+}
+
+.panel-header p {
+    font-size: clamp(0.75rem, 1.4vw, 0.82rem);
+    color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   Left Panel: Console Selector & Gradient Download Button
+   ========================================================================== */
+
+.platform-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(0.4rem, 1vw, 0.55rem);
+    flex-shrink: 0;
+}
+
+.plat-btn {
+    background: var(--bg-inner);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: clamp(0.5rem, 1.2vw, 0.65rem) clamp(0.65rem, 1.5vw, 0.85rem);
+    color: var(--text-secondary);
+    font-family: var(--font-main);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
+    transition: var(--transition);
+}
+
+.plat-btn:hover {
+    border-color: var(--sec-vibrant);
+    background: rgba(32, 62, 111, 0.75);
+    color: var(--text-primary);
+}
+
+.plat-btn.active {
+    background: var(--user-gradient-subtle);
+    border-color: var(--ter-mint);
+    color: var(--ter-ice);
+    box-shadow: 0 0 16px rgba(80, 217, 164, 0.28);
+}
+
+.plat-icon {
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    margin-bottom: 0.1rem;
+}
+
+.plat-name {
+    font-size: clamp(0.78rem, 1.5vw, 0.85rem);
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.plat-btn.active .plat-name {
+    color: var(--ter-ice);
+}
+
+.plat-sub {
+    font-size: clamp(0.65rem, 1.2vw, 0.72rem);
+    color: var(--text-muted);
+}
+
+/* Gradient Download Button */
+.download-action-box {
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.btn-download-main {
+    width: 100%;
+    background: var(--user-gradient);
+    color: #ffffff;
+    border: 1px solid rgba(152, 250, 206, 0.45);
+    border-radius: var(--radius-md);
+    padding: clamp(0.85rem, 1.8vh, 1.1rem) clamp(1rem, 2vw, 1.25rem);
+    font-family: var(--font-main);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.6rem, 1.5vw, 0.9rem);
+    box-shadow: 0 8px 24px rgba(20, 148, 142, 0.4);
+    transition: var(--transition);
+}
+
+.btn-download-main:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(30, 187, 136, 0.5);
+    background: var(--user-gradient-hover);
+    border-color: var(--ter-mint);
+}
+
+.btn-download-main:active {
+    transform: translateY(0);
+}
+
+.btn-icon {
+    font-size: clamp(1.3rem, 2.5vw, 1.6rem);
+    font-weight: 900;
+    flex-shrink: 0;
+}
+
+.btn-text-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    min-width: 0;
+}
+
+.btn-heading {
+    font-size: clamp(0.95rem, 2vw, 1.12rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    line-height: 1.2;
+}
+
+.btn-meta {
+    font-size: clamp(0.7rem, 1.4vw, 0.78rem);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--ter-ice);
+    word-break: break-all;
+}
+
+.status-indicator {
+    margin-top: 0.5rem;
+    font-size: clamp(0.72rem, 1.4vw, 0.78rem);
+    color: var(--text-secondary);
+}
+
+.status-indicator strong {
+    color: var(--ter-ice);
+}
+
+/* Compact Dropzone */
+.dropzone-compact {
+    background: var(--bg-inner);
+    border: 1px dashed var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: clamp(0.5rem, 1.2vh, 0.65rem) clamp(0.65rem, 1.5vw, 0.85rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem;
+    font-size: clamp(0.7rem, 1.3vw, 0.78rem);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition);
+    flex-shrink: 0;
+}
+
+.dropzone-compact:hover, .dropzone-compact.dragover {
+    border-color: var(--ter-mint);
+    background: rgba(10, 75, 82, 0.45);
+}
+
+.hidden-input {
+    display: none;
+}
+
+.drop-icon {
+    flex-shrink: 0;
+}
+
+.drop-caption {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.btn-browse-mini {
+    background: var(--sec-deep);
+    border: 1px solid var(--sec-mid);
+    color: var(--ter-ice);
+    padding: 0.25rem 0.55rem;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-main);
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    flex-shrink: 0;
+}
+
+.btn-browse-mini:hover {
+    background: var(--sec-mid);
+    border-color: var(--ter-mint);
+    color: #ffffff;
+}
+
+/* ==========================================================================
+   Right Panel: Console-Specific Steps
+   ========================================================================== */
+
+.steps-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: clamp(0.5rem, 1.2vh, 0.65rem);
+    flex: 1;
+    min-height: 0;
+}
+
+.step-card {
+    background: var(--bg-inner);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: clamp(0.55rem, 1.2vh, 0.7rem) clamp(0.65rem, 1.5vw, 0.85rem);
+    display: flex;
+    gap: clamp(0.55rem, 1.5vw, 0.75rem);
+    align-items: flex-start;
+    transition: var(--transition);
+}
+
+.step-card:hover {
+    border-color: var(--sec-vibrant);
+    background: var(--bg-card);
+}
+
+.step-number {
+    width: clamp(20px, 2.5vw, 24px);
+    height: clamp(20px, 2.5vw, 24px);
+    background: linear-gradient(
+        120deg,
+        #107B80 0%,
+        #14948E 45%,
+        #1EBB88 100%
+    );
+    color: #ffffff;
+    font-family: var(--font-main);
+    font-weight: 900;
+    font-size: clamp(0.75rem, 1.4vw, 0.82rem);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    box-shadow: 0 0 10px rgba(80, 217, 164, 0.4);
+}
+
+.step-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.step-details h3 {
+    font-family: var(--font-main);
+    font-size: clamp(0.85rem, 1.6vw, 0.92rem);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.15rem;
+}
+
+.step-details p {
+    font-size: clamp(0.75rem, 1.4vw, 0.8rem);
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.code-badge {
+    background: var(--bg-input);
+    border: 1px solid var(--sec-mid);
+    border-radius: var(--radius-sm);
+    padding: 0.1rem 0.4rem;
+    font-family: var(--font-mono);
+    font-size: clamp(0.7rem, 1.3vw, 0.75rem);
+    color: var(--ter-ice);
+    word-break: break-all;
+}
+
+.path-box {
+    background: var(--bg-input);
+    border: 1px solid var(--sec-mid);
+    border-radius: var(--radius-sm);
+    padding: 0.35rem 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: clamp(0.68rem, 1.3vw, 0.72rem);
+    color: var(--ter-mint);
+    word-break: break-all;
+    flex-wrap: wrap;
+}
+
+.path-box code {
+    flex: 1;
+    min-width: 150px;
+}
+
+.btn-copy-action {
+    background: var(--sec-deep);
+    border: 1px solid var(--sec-mid);
+    color: var(--ter-ice);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-main);
+    font-size: 0.7rem;
+    font-weight: 600;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: var(--transition);
+}
+
+.btn-copy-action:hover {
+    border-color: var(--ter-mint);
+    background: var(--sec-mid);
+    color: #ffffff;
+}
+
+.step-list {
+    margin: 0.2rem 0 0 1rem;
+    font-size: clamp(0.72rem, 1.3vw, 0.78rem);
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.step-list li {
+    margin-bottom: 0.15rem;
+}
+
+.warn-text {
+    color: #ff6b8b;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   Footer & Toast
+   ========================================================================== */
+
+.app-footer {
+    text-align: center;
+    font-size: clamp(0.7rem, 1.2vw, 0.75rem);
+    color: var(--text-secondary);
+    opacity: 0.85;
+    flex-shrink: 0;
+}
+
+.toast {
+    position: fixed;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    max-width: calc(100vw - 2.5rem);
+    background: linear-gradient(
+        120deg,
+        #153355 0%,
+        #203E6F 35%,
+        #107B80 75%,
+        #14948E 100%
+    );
+    border: 1px solid var(--ter-mint);
+    border-radius: var(--radius-md);
+    padding: 0.65rem 1rem;
+    font-size: clamp(0.78rem, 1.4vw, 0.85rem);
+    font-weight: 600;
+    color: var(--text-primary);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transform: translateY(15px);
+    transition: var(--transition);
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+
+/* Tablet & Smaller Devices (<= 900px) */
+@media (max-width: 900px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .panel {
+        gap: 0.85rem;
+    }
+
+    .steps-container {
+        gap: 0.65rem;
+    }
+}
+
+/* Mobile Devices (<= 600px) */
+@media (max-width: 600px) {
+    .app-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .title-select-wrapper {
+        flex: 1;
+    }
+
+    .platform-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .btn-download-main {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.4rem;
+    }
+
+    .btn-text-content {
+        align-items: center;
+        text-align: center;
+    }
+
+    .path-box {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .btn-copy-action {
+        width: 100%;
+        text-align: center;
+        margin-top: 0.25rem;
+    }
+}
+
+/* Very Small Mobile Screens (<= 380px) */
+@media (max-width: 380px) {
+    .platform-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .brand-titles h1 {
+        font-size: 1rem;
+    }
+}
+
+/* Accessibility & Search Engine Crawler Utility */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
