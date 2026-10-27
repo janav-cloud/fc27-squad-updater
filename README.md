@@ -37,6 +37,10 @@ npx serve .
 ```
 Then visit: `http://localhost:8000`
 
+### GitHub Pages Deployment
+- Keep `.nojekyll` in your repository root to bypass Jekyll processing so GitHub Pages serves raw squad binary packages.
+- The built-in downloader automatically fetches the binary package and prompts your browser to save it as `SquadsYYYYMMDD000000` with no `.htm` or file extensions.
+
 ---
 
 ## 🎮 How to Import Squad Files

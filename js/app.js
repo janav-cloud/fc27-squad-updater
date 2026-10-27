@@ -444,33 +444,126 @@
     }
 
     // ==========================================================================
-    // 1-Click Instant Download
+    // 1-Click Resilient Squad Downloader (GitHub Pages & Local Compatible)
     // ==========================================================================
+
+    function getBaseUrl() {
+        let loc = window.location.href;
+        // Strip query parameters and hash
+        loc = loc.split('?')[0].split('#')[0];
+        // If it points to an html file, strip the filename
+        if (/\.[a-zA-Z0-9]+$/.test(loc)) {
+            loc = loc.substring(0, loc.lastIndexOf('/') + 1);
+        } else if (!loc.endsWith('/')) {
+            // Fix missing trailing slash on GitHub Pages repository URLs
+            loc += '/';
+        }
+        return loc;
+    }
 
     function initDownloadButton() {
         if (!downloadBtn) return;
 
-        downloadBtn.addEventListener('click', () => {
+        downloadBtn.addEventListener('click', async () => {
             const info = getActiveDownloadInfo();
-            const filePath = `downloads/${info.sourceFile}`;
+            if (!info) return;
 
-            try {
+            // Visual feedback
+            const origContent = downloadBtn.innerHTML;
+            downloadBtn.style.pointerEvents = 'none';
+            downloadBtn.style.opacity = '0.75';
+            if (downloadStatus) {
+                downloadStatus.innerHTML = `⏳ <strong>Downloading ${info.downloadFilename}...</strong> Fetching save file.`;
+            }
+
+            const baseUrl = getBaseUrl();
+            
+            // Build candidate URLs to try across GitHub Pages, root, and subfolders
+            const candidateUrls = [
+                new URL(`downloads/${info.sourceFile}.bin`, baseUrl).href,
+                new URL(`downloads/${info.sourceFile}`, baseUrl).href,
+                `downloads/${info.sourceFile}.bin`,
+                `downloads/${info.sourceFile}`,
+                `./downloads/${info.sourceFile}.bin`,
+                `./downloads/${info.sourceFile}`,
+                `fc27-squad-updater/downloads/${info.sourceFile}.bin`,
+                `fc27-squad-updater/downloads/${info.sourceFile}`,
+                `../downloads/${info.sourceFile}.bin`,
+                `../downloads/${info.sourceFile}`
+            ];
+
+            const uniqueUrls = Array.from(new Set(candidateUrls));
+
+            let downloadedBlob = null;
+            let successUrl = null;
+
+            for (const url of uniqueUrls) {
+                try {
+                    const resp = await fetch(url, { cache: 'no-cache' });
+                    if (resp.ok) {
+                        const contentType = (resp.headers.get('content-type') || '').toLowerCase();
+                        // CRITICAL: If response is HTML, it is a 404/SPA error page from GitHub Pages, skip it!
+                        if (contentType.includes('text/html')) {
+                            continue;
+                        }
+                        const buffer = await resp.arrayBuffer();
+                        // Verify valid squad binary (must be > 50KB, error pages are < 10KB)
+                        if (buffer.byteLength > 50000) {
+                            downloadedBlob = new Blob([buffer], { type: 'application/octet-stream' });
+                            successUrl = url;
+                            break;
+                        }
+                    }
+                } catch (err) {
+                    // Continue to next candidate URL (e.g. CORS restriction or network fail)
+                }
+            }
+
+            downloadBtn.style.pointerEvents = '';
+            downloadBtn.style.opacity = '';
+
+            if (downloadedBlob) {
+                // Trigger download using in-memory Blob URL
+                // The browser will strictly save as binary with no .htm extension
+                const blobUrl = URL.createObjectURL(downloadedBlob);
                 const a = document.createElement('a');
-                a.href = filePath;
-                a.download = info.downloadFilename;
+                a.href = blobUrl;
+                a.download = info.downloadFilename; // Exactly "Squads20261006000000" (no extension)
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
 
                 if (downloadStatus) {
                     downloadStatus.innerHTML = `✅ <strong>Downloaded ${info.downloadFilename}!</strong> Follow the steps on the right.`;
                 }
                 showToast(`Downloaded ${info.downloadFilename}!`);
-            } catch (err) {
-                console.error(err);
-                if (downloadStatus) {
-                    downloadStatus.textContent = `Download notice: File could not be retrieved directly.`;
+            } else {
+                // If fetch was blocked (e.g. file:/// protocol in local Chrome without web server):
+                if (window.location.protocol === 'file:') {
+                    try {
+                        const fallbackPath = `downloads/${info.sourceFile}`;
+                        const a = document.createElement('a');
+                        a.href = fallbackPath;
+                        a.download = info.downloadFilename;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        if (downloadStatus) {
+                            downloadStatus.innerHTML = `✅ <strong>Downloaded ${info.downloadFilename}!</strong> Follow the steps on the right.`;
+                        }
+                        showToast(`Downloaded ${info.downloadFilename}!`);
+                        return;
+                    } catch (e) {
+                        // pass
+                    }
                 }
+
+                // If on GitHub Pages and file truly not accessible:
+                if (downloadStatus) {
+                    downloadStatus.innerHTML = `⚠️ <strong>File not found on server.</strong> Please ensure the <code>downloads/</code> folder and <code>.nojekyll</code> are committed to your GitHub repository.`;
+                }
+                showToast(`Squad file could not be found on server.`, true);
             }
         });
     }
